@@ -1,6 +1,9 @@
 import os
+from dotenv import load_dotenv
 
 from ibeam.src.utils.py_utils import strtobool
+
+load_dotenv()
 
 UNDEFINED = object()
 

@@ -42,8 +42,9 @@ def _start_gateway(gateway_dir):
         creationflags = subprocess.CREATE_NEW_CONSOLE
 
     elif sys.platform == 'darwin':
-        args = ["open", "-F", "-a", "Terminal", r"bin/run.sh", r"root/conf.yaml"]
-        _LOGGER.info(f'Starting Gateway as Mac process with params: {args}')
+        # args = ["open", "-F", "-a", "Terminal", r"bin/run.sh", r"root/conf.yaml"]
+        command = 'ttab -t "IB Gateway" -d "$HOME/code/ibkr/clientportal.gw" "bin/run.sh root/conf.yaml"'
+        _LOGGER.info(f'Starting Gateway as Mac process with command: {command}')
 
     elif sys.platform == 'linux':
         args = ["bash", r"bin/run.sh", r"root/conf.yaml"]
@@ -52,11 +53,7 @@ def _start_gateway(gateway_dir):
     else:
         raise EnvironmentError(f'Unknown platform: {sys.platform}')
 
-    subprocess.Popen(
-        args=args,
-        cwd=gateway_dir,
-        creationflags=creationflags
-    )
+    os.system(command)
 
 def _try_starting_gateway(
         gateway_process_match:str,
@@ -143,6 +140,7 @@ class ProcessHandler():
         self.verify_connection = verify_connection
 
     def start_gateway(self) ->  Optional[List[int]]:
+        # TODO: Try to start gateway using ttab?
         return _try_starting_gateway(
             gateway_process_match=self.gateway_process_match,
             gateway_dir=self.gateway_dir,
